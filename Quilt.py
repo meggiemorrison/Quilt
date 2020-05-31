@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageOps
 import sys
 import math
 
@@ -26,14 +26,15 @@ def main():
                 red.append(int(parts[1]))
                 green.append(int(parts[2]))
                 blue.append(int(parts[3]))
+            
+        j = set_side(scales)
+        x = 500
+        y = 500
 
-        im = Image.new('RGB', (500, 500), (255, 255, 255))
-        draw = ImageDraw.Draw(im)
+        im = Image.new('RGBA', (x, y), (255, 255, 255))
 
-
-        queue = [(0, 250, 250, 200)]
+        queue = [(0, (x/2), (y/2), j)]
         drawRec2(queue, im)
-
 
         im.save("curr.png")
 
@@ -49,7 +50,6 @@ def drawRec2(queue, im):
         return
 
     current = queue.pop(0)  
-    # current = (depth, x, y, side_length)
     depth, x, y, side_length = current
 
     if (depth >= len(scales)):
@@ -67,6 +67,7 @@ def drawRec2(queue, im):
     queue.append((depth + 1, x+side_length/2, y+side_length/2, side_length))
     # Bottom right
     queue.append((depth + 1, x+side_length/2, y-side_length/2, side_length))
+    
 
     drawRec2(queue, im)
 
@@ -86,6 +87,26 @@ def nonblank_lines(f):
         line = l.rstrip()
         if line:
             yield line
+
+def set_side(nums):
+    big = []
+    small = []
+    for val in nums:
+        if val > 0.5:
+            big.append(val)
+        else:
+            small.append(val)
+    
+    max_sc = max(float(sub) for sub in nums) 
+    if max_sc >= 2.0:
+        j = 100
+    elif max_sc > 1.0:
+        j = 150
+    elif len(big) > 2:
+        j = 200
+    else:
+        j = 250
+    return j
 
 # Driver code:
 
