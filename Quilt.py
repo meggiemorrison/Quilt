@@ -28,24 +28,26 @@ def main():
                 blue.append(int(parts[3]))
             
         j = set_side(scales)
+        base = (j/2) * (j/2)
+        print(base)
         x = 500
         y = 500
 
         im = Image.new('RGBA', (x, y), (255, 255, 255))
 
         queue = [(0, (x/2), (y/2), j)]
-        drawRec2(queue, im)
+        drawRec2(queue, im, base)
 
         im.save("curr.png")
 
 
-def drawRec2(queue, im):
+def drawRec2(queue, im, base):
     global scales
     global red
     global green
     global blue
     draw = ImageDraw.Draw(im)
-
+    
     if(not queue):
         return
 
@@ -55,7 +57,8 @@ def drawRec2(queue, im):
     if (depth >= len(scales)):
         return
 
-    side_length = side_length * scales[depth]
+    #side_length = side_length * scales[depth]
+    side_length = math.sqrt(scales[depth] * base)
     draw.rectangle((x-side_length/2, y-side_length/2, x+side_length/2, y+side_length/2),
                     fill=(red[depth], green[depth], blue[depth]))
     
@@ -69,7 +72,7 @@ def drawRec2(queue, im):
     queue.append((depth + 1, x+side_length/2, y-side_length/2, side_length))
     
 
-    drawRec2(queue, im)
+    drawRec2(queue, im, base)
 
 # Reads from stdin and adds input to a list
 def fill_values():  
@@ -99,13 +102,13 @@ def set_side(nums):
     
     max_sc = max(float(sub) for sub in nums) 
     if max_sc >= 2.0:
-        j = 100
-    elif max_sc > 1.0:
-        j = 150
-    elif len(big) > 2:
         j = 200
-    else:
+    elif max_sc > 1.0:
         j = 250
+    elif len(big) > 2:
+        j = 300
+    else:
+        j = 400
     return j
 
 # Driver code:
