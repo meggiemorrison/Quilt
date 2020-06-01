@@ -29,19 +29,19 @@ def main():
             
         j = set_side(scales)
         base = (j/2) * (j/2)
-        print(base)
+        #print(base)
         x = 500
         y = 500
 
         im = Image.new('RGBA', (x, y), (255, 255, 255))
 
         queue = [(0, (x/2), (y/2), j)]
-        drawRec2(queue, im, base)
+        drawRec2(queue, im, j)
 
         im.save("curr.png")
 
 
-def drawRec2(queue, im, base):
+def drawRec2(queue, im, j):
     global scales
     global red
     global green
@@ -53,15 +53,21 @@ def drawRec2(queue, im, base):
 
     current = queue.pop(0)  
     depth, x, y, side_length = current
+    #print(depth)
+    #print(side_length)
 
     if (depth >= len(scales)):
         return
 
     #side_length = side_length * scales[depth]
-    side_length = math.sqrt(scales[depth] * base)
+    print("og side_length: ", side_length)
+    #j = side_length
+    #side_length = math.sqrt(scales[depth] * base)
+    side_length = scales[depth] * j
+    print ("new side length", side_length, "\nscale: ", scales[depth])
     draw.rectangle((x-side_length/2, y-side_length/2, x+side_length/2, y+side_length/2),
                     fill=(red[depth], green[depth], blue[depth]))
-    
+    """
     # Top left
     queue.append((depth + 1, x-side_length/2, y+side_length/2, side_length))
     # Bottom left
@@ -70,9 +76,18 @@ def drawRec2(queue, im, base):
     queue.append((depth + 1, x+side_length/2, y+side_length/2, side_length))
     # Bottom right
     queue.append((depth + 1, x+side_length/2, y-side_length/2, side_length))
-    
+"""
+    # Top left
+    queue.append((depth + 1, x-side_length/2, y+side_length/2, j))
+    # Bottom left
+    queue.append((depth + 1, x-side_length/2, y-side_length/2, j))
+    # Top right
+    queue.append((depth + 1, x+side_length/2, y+side_length/2, j))
+    # Bottom right
+    queue.append((depth + 1, x+side_length/2, y-side_length/2, j))
 
-    drawRec2(queue, im, base)
+
+    drawRec2(queue, im, j)
 
 # Reads from stdin and adds input to a list
 def fill_values():  
@@ -102,13 +117,13 @@ def set_side(nums):
     
     max_sc = max(float(sub) for sub in nums) 
     if max_sc >= 2.0:
-        j = 200
+        j = 80
     elif max_sc > 1.0:
-        j = 250
+        j = 125
     elif len(big) > 2:
-        j = 300
+        j = 180
     else:
-        j = 400
+        j = 250
     return j
 
 # Driver code:
