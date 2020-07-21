@@ -1,4 +1,4 @@
-# Quilting Bee
+# Quilt
 
 To run the program, on command line enter "python3 Quilt.py < testfile.txt", inserting
 your testfile name. The resulting image ("curr.png") should appear in your current directory. 
