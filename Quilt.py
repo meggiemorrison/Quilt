@@ -53,30 +53,16 @@ def drawRec2(queue, im, j):
 
     current = queue.pop(0)  
     depth, x, y, side_length = current
-    #print(depth)
-    #print(side_length)
 
     if (depth >= len(scales)):
         return
 
-    #side_length = side_length * scales[depth]
     print("og side_length: ", side_length)
-    #j = side_length
-    #side_length = math.sqrt(scales[depth] * base)
     side_length = scales[depth] * j
     print ("new side length", side_length, "\nscale: ", scales[depth])
     draw.rectangle((x-side_length/2, y-side_length/2, x+side_length/2, y+side_length/2),
                     fill=(red[depth], green[depth], blue[depth]))
-    """
-    # Top left
-    queue.append((depth + 1, x-side_length/2, y+side_length/2, side_length))
-    # Bottom left
-    queue.append((depth + 1, x-side_length/2, y-side_length/2, side_length))
-    # Top right
-    queue.append((depth + 1, x+side_length/2, y+side_length/2, side_length))
-    # Bottom right
-    queue.append((depth + 1, x+side_length/2, y-side_length/2, side_length))
-"""
+
     # Top left
     queue.append((depth + 1, x-side_length/2, y+side_length/2, j))
     # Bottom left
@@ -85,7 +71,6 @@ def drawRec2(queue, im, j):
     queue.append((depth + 1, x+side_length/2, y+side_length/2, j))
     # Bottom right
     queue.append((depth + 1, x+side_length/2, y-side_length/2, j))
-
 
     drawRec2(queue, im, j)
 
